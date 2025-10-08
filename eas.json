@@ -19,9 +19,24 @@
       "android": {
         "buildType": "app-bundle"
       }
+    },
+    "preview-ipa": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      }
+    },
+    "production-ipa": {
+      "autoIncrement": true,
+      "distribution": "store",
+      "ios": {
+        "simulator": false
+      }
     }
   },
   "submit": {
-    "production-aab": {}
+    "production-aab": {},
+    "production-ipa": {}
   }
 }
+

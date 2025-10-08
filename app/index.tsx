@@ -1,6 +1,5 @@
-import "../global.css"
-
-import Splash from "components/splash";
+import "../global.css";
+import Splash from "components/merge";
 
 const Root = () => {
   return <Splash />;
