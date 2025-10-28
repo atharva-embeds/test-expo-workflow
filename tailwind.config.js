@@ -7,7 +7,6 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-
         // Platform-specific system font
         system: platformSelect({
           ios: "Georgia",
