@@ -10,12 +10,98 @@ import Svg, {
   LinearGradient,
   Stop,
   RadialGradient,
+  Image,
+  G,
 } from "react-native-svg";
 
 interface SolarDiagramProps {
   width: number;
   height: number;
 }
+
+// Diagram layout constants
+const DIAGRAM_WIDTH = 350;
+const DIAGRAM_HEIGHT = 300;
+
+// Component positions and dimensions
+const ELECTRIC_TOWER_X = 20;
+const ELECTRIC_TOWER_Y = 80;
+const ELECTRIC_TOWER_WIDTH = 20;
+const ELECTRIC_TOWER_HEIGHT = 140;
+
+const OUTPUT_POINT_RADIUS = 5;
+const OUTPUT_A_X = 45;
+const OUTPUT_A_Y = 120;
+const OUTPUT_B_X = 45;
+const OUTPUT_B_Y = 150;
+const OUTPUT_C_X = 45;
+const OUTPUT_C_Y = 180;
+
+const INVERTER_X = 90;
+const INVERTER_Y = 130;
+const INVERTER_WIDTH = 40;
+const INVERTER_HEIGHT = 40;
+
+const SOLAR_PANEL_X = 90;
+const SOLAR_PANEL_Y = 70;
+const SOLAR_PANEL_WIDTH = 40;
+const SOLAR_PANEL_HEIGHT = 30;
+
+const EMU_X = 90;
+const EMU_Y = 190;
+const EMU_WIDTH = 40;
+const EMU_HEIGHT = 30;
+
+const CLOUD_X = 175;
+const CLOUD_Y = 125;
+const CLOUD_WIDTH = 40;
+const CLOUD_HEIGHT = 20;
+
+const MOBILE_X = 265;
+const MOBILE_Y = 105;
+const MOBILE_WIDTH = 15;
+const MOBILE_HEIGHT = 30;
+
+const LAPTOP_X = 265;
+const LAPTOP_Y = 155;
+const LAPTOP_WIDTH = 30;
+const LAPTOP_HEIGHT = 20;
+
+const SECOND_INVERTER_X = 55;
+const SECOND_INVERTER_Y = 135;
+const SECOND_INVERTER_WIDTH = 30;
+const SECOND_INVERTER_HEIGHT = 30;
+
+const SOLAR_PANELS_X = 120;
+const SOLAR_PANELS_Y = 135;
+const SOLAR_PANELS_WIDTH = 40;
+const SOLAR_PANELS_HEIGHT = 20;
+
+const MONITOR_X = 195;
+const MONITOR_Y = 135;
+const MONITOR_WIDTH = 30;
+const MONITOR_HEIGHT = 30;
+
+const SECOND_CLOUD_X = 255;
+const SECOND_CLOUD_Y = 120;
+const SECOND_CLOUD_WIDTH = 40;
+const SECOND_CLOUD_HEIGHT = 20;
+
+const DASHBOARD_X = 270;
+const DASHBOARD_Y = 160;
+const DASHBOARD_WIDTH = 25;
+const DASHBOARD_HEIGHT = 15;
+
+const MOBILE_APP_X = 305;
+const MOBILE_APP_Y = 155;
+const MOBILE_APP_WIDTH = 12;
+const MOBILE_APP_HEIGHT = 25;
+
+// Arrow positions
+const ARROW_TO_INVERTER_X1 = 25;
+const ARROW_TO_INVERTER_Y1 = 150;
+const ARROW_TO_INVERTER_X2 = 45;
+const ARROW_TO_INVERTER_Y2 = 150;
 
 const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -45,7 +131,7 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
       <Svg
         width={width}
         height={height}
-        viewBox="0 0 350 300"
+        viewBox={`0 0 ${DIAGRAM_WIDTH} ${DIAGRAM_HEIGHT}`}
         className="shadow-2xl rounded-2xl"
       >
         <Defs>
@@ -54,50 +140,6 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
             <Stop offset="0" stopColor="#FFFFFF" />
             <Stop offset="0.5" stopColor="#F8FAFC" />
             <Stop offset="1" stopColor="#F1F5F9" />
-          </LinearGradient>
-
-          {/* 3D Effect Gradients */}
-          <LinearGradient id="towerGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#E5E7EB" />
-            <Stop offset="0.5" stopColor="#D1D5DB" />
-            <Stop offset="1" stopColor="#9CA3AF" />
-          </LinearGradient>
-
-          <LinearGradient id="inverterGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#FED7AA" />
-            <Stop offset="0.5" stopColor="#FDBA74" />
-            <Stop offset="1" stopColor="#FB923C" />
-          </LinearGradient>
-
-          <LinearGradient id="panelGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#93C5FD" />
-            <Stop offset="0.3" stopColor="#60A5FA" />
-            <Stop offset="0.7" stopColor="#3B82F6" />
-            <Stop offset="1" stopColor="#2563EB" />
-          </LinearGradient>
-
-          <LinearGradient id="monitorGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#DDD6FE" />
-            <Stop offset="0.5" stopColor="#C4B5FD" />
-            <Stop offset="1" stopColor="#A78BFA" />
-          </LinearGradient>
-
-          <LinearGradient id="cloudGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#E0F2FE" />
-            <Stop offset="0.5" stopColor="#B3E5FC" />
-            <Stop offset="1" stopColor="#81D4FA" />
-          </LinearGradient>
-
-          <LinearGradient id="computerGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#F3E8FF" />
-            <Stop offset="0.5" stopColor="#E9D5FF" />
-            <Stop offset="1" stopColor="#D8B4FE" />
-          </LinearGradient>
-
-          <LinearGradient id="phoneGradient" x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor="#FCE7F3" />
-            <Stop offset="0.5" stopColor="#FBCFE8" />
-            <Stop offset="1" stopColor="#F9A8D4" />
           </LinearGradient>
 
           {/* Energy Flow Gradient */}
@@ -124,97 +166,94 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
           rx="16"
         />
 
-        {/* Electric Tower */}
-        <Rect
-          x="20"
-          y="80"
-          width="20"
-          height="140"
-          fill="url(#towerGradient)"
-          rx="4"
-          stroke="#6B7280"
-          strokeWidth="2"
-        />
-        <SvgText
-          x="30"
-          y="235"
-          fontSize="12"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Electric Tower
-        </SvgText>
+        {/* Power Source Section */}
+        <G id="power-source">
+          {/* Electric Tower */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={ELECTRIC_TOWER_X}
+            y={ELECTRIC_TOWER_Y}
+            width={ELECTRIC_TOWER_WIDTH}
+            height={ELECTRIC_TOWER_HEIGHT}
+          />
+          <SvgText
+            x="30"
+            y="235"
+            fontSize="12"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Electric Tower
+          </SvgText>
 
-        {/* Output Points A, B, C */}
-        <Circle
-          cx="45"
-          cy="120"
-          r="5"
-          fill="#FFFFFF"
-          stroke="#374151"
-          strokeWidth="1"
-        />
-        <SvgText
-          x="45"
-          y="125"
-          fontSize="8"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-        >
-          A
-        </SvgText>
+          {/* Output Points A, B, C */}
+          <Circle
+            cx={OUTPUT_A_X}
+            cy={OUTPUT_A_Y}
+            r={OUTPUT_POINT_RADIUS}
+            fill="#FFFFFF"
+            stroke="#374151"
+            strokeWidth="1"
+          />
+          <SvgText
+            x="45"
+            y="125"
+            fontSize="8"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+          >
+            A
+          </SvgText>
 
-        <Circle
-          cx="45"
-          cy="150"
-          r="5"
-          fill="#FFFFFF"
-          stroke="#374151"
-          strokeWidth="1"
-        />
-        <SvgText
-          x="45"
-          y="155"
-          fontSize="8"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-        >
-          B
-        </SvgText>
+          <Circle
+            cx={OUTPUT_B_X}
+            cy={OUTPUT_B_Y}
+            r={OUTPUT_POINT_RADIUS}
+            fill="#FFFFFF"
+            stroke="#374151"
+            strokeWidth="1"
+          />
+          <SvgText
+            x="45"
+            y="155"
+            fontSize="8"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+          >
+            B
+          </SvgText>
 
-        <Circle
-          cx="45"
-          cy="180"
-          r="5"
-          fill="#FFFFFF"
-          stroke="#374151"
-          strokeWidth="1"
-        />
-        <SvgText
-          x="45"
-          y="185"
-          fontSize="8"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-        >
-          C
-        </SvgText>
+          <Circle
+            cx={OUTPUT_C_X}
+            cy={OUTPUT_C_Y}
+            r={OUTPUT_POINT_RADIUS}
+            fill="#FFFFFF"
+            stroke="#374151"
+            strokeWidth="1"
+          />
+          <SvgText
+            x="45"
+            y="185"
+            fontSize="8"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+          >
+            C
+          </SvgText>
+        </G>
 
         {/* Inverter */}
-        <Rect
-          x="90"
-          y="130"
-          width="40"
-          height="40"
-          fill="url(#inverterGradient)"
-          rx="6"
-          stroke="#FB923C"
-          strokeWidth="2"
+        <Image
+          href={require("../assets/solar.png")}
+          x={INVERTER_X}
+          y={INVERTER_Y}
+          width={INVERTER_WIDTH}
+          height={INVERTER_HEIGHT}
         />
         <SvgText
           x="110"
@@ -229,15 +268,12 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
         </SvgText>
 
         {/* Solar Panel above Inverter */}
-        <Rect
-          x="90"
-          y="70"
-          width="40"
-          height="30"
-          fill="url(#panelGradient)"
-          rx="4"
-          stroke="#3B82F6"
-          strokeWidth="2"
+        <Image
+          href={require("../assets/solar.png")}
+          x={SOLAR_PANEL_X}
+          y={SOLAR_PANEL_Y}
+          width={SOLAR_PANEL_WIDTH}
+          height={SOLAR_PANEL_HEIGHT}
         />
         <SvgText
           x="110"
@@ -252,15 +288,12 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
         </SvgText>
 
         {/* EMU below Inverter */}
-        <Rect
-          x="90"
-          y="190"
-          width="40"
-          height="30"
-          fill="url(#monitorGradient)"
-          rx="4"
-          stroke="#A78BFA"
-          strokeWidth="2"
+        <Image
+          href={require("../assets/solar.png")}
+          x={EMU_X}
+          y={EMU_Y}
+          width={EMU_WIDTH}
+          height={EMU_HEIGHT}
         />
         <SvgText
           x="110"
@@ -275,11 +308,12 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
         </SvgText>
 
         {/* Cloud */}
-        <Path
-          d="M 185 130 Q 185 125 190 125 Q 195 125 200 130 Q 205 125 210 125 Q 215 125 215 130 Q 215 135 210 140 Q 205 145 200 145 Q 195 145 190 140 Q 185 145 180 145 Q 175 145 175 140 Q 175 135 180 130 Z"
-          fill="url(#cloudGradient)"
-          stroke="#81D4FA"
-          strokeWidth="2"
+        <Image
+          href={require("../assets/solar.png")}
+          x={CLOUD_X}
+          y={CLOUD_Y}
+          width={CLOUD_WIDTH}
+          height={CLOUD_HEIGHT}
         />
         <SvgText
           x="197.5"
@@ -293,269 +327,223 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
           Cloud
         </SvgText>
 
-        {/* Mobile */}
-        <Rect
-          x="265"
-          y="105"
-          width="15"
-          height="30"
-          fill="url(#phoneGradient)"
-          rx="3"
-          stroke="#EC4899"
-          strokeWidth="2"
-        />
-        <Rect x="268" y="110" width="9" height="20" fill="#FFFFFF" rx="1" />
-        <SvgText
-          x="272.5"
-          y="150"
-          fontSize="10"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Mobile
-        </SvgText>
+        {/* End User Devices Section */}
+        <G id="end-devices">
+          {/* Mobile */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={MOBILE_X}
+            y={MOBILE_Y}
+            width={MOBILE_WIDTH}
+            height={MOBILE_HEIGHT}
+          />
+          <SvgText
+            x="272.5"
+            y="150"
+            fontSize="10"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Mobile
+          </SvgText>
 
-        {/* Laptop */}
-        <Rect
-          x="265"
-          y="155"
-          width="30"
-          height="20"
-          fill="url(#computerGradient)"
-          rx="3"
-          stroke="#8B5CF6"
-          strokeWidth="2"
-        />
-        <Rect x="270" y="160" width="20" height="10" fill="#FFFFFF" rx="1" />
-        <SvgText
-          x="280"
-          y="185"
-          fontSize="10"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Laptop
-        </SvgText>
+          {/* Laptop */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={LAPTOP_X}
+            y={LAPTOP_Y}
+            width={LAPTOP_WIDTH}
+            height={LAPTOP_HEIGHT}
+          />
+          <SvgText
+            x="280"
+            y="185"
+            fontSize="10"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Laptop
+          </SvgText>
 
-        {/* Arrow to Inverter */}
-        <Line
-          x1="25"
-          y1="150"
-          x2="45"
-          y2="150"
-          stroke="url(#energyFlow)"
-          strokeWidth="3"
-        />
-        <Path d="M 45 145 L 50 150 L 45 155 Z" fill="url(#energyFlow)" />
+          {/* Arrow to Inverter */}
+          <Line
+            x1={ARROW_TO_INVERTER_X1}
+            y1={ARROW_TO_INVERTER_Y1}
+            x2={ARROW_TO_INVERTER_X2}
+            y2={ARROW_TO_INVERTER_Y2}
+            stroke="url(#energyFlow)"
+            strokeWidth="3"
+          />
+          <Path d="M 45 145 L 50 150 L 45 155 Z" fill="url(#energyFlow)" />
 
-        {/* Inverter */}
-        <Rect
-          x="55"
-          y="135"
-          width="30"
-          height="30"
-          fill="url(#inverterGradient)"
-          rx="4"
-        />
-        {/* Lightning Icon */}
-        <Path
-          d="M 65 140 L 68 140 L 66 147 L 70 147 L 63 160 L 65 152 L 62 152 Z"
-          fill="#FFFFFF"
-        />
-        <SvgText
-          x="70"
-          y="180"
-          fontSize="10"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Inverter
-        </SvgText>
+          {/* Inverter */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={SECOND_INVERTER_X}
+            y={SECOND_INVERTER_Y}
+            width={SECOND_INVERTER_WIDTH}
+            height={SECOND_INVERTER_HEIGHT}
+          />
+          <SvgText
+            x="70"
+            y="180"
+            fontSize="10"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Inverter
+          </SvgText>
 
-        {/* Arrow to Solar Panels */}
-        <Line
-          x1="90"
-          y1="150"
-          x2="110"
-          y2="150"
-          stroke="url(#energyFlow)"
-          strokeWidth="3"
-        />
-        <Path d="M 110 145 L 115 150 L 110 155 Z" fill="url(#energyFlow)" />
+          {/* Arrow to Solar Panels */}
+          <Line
+            x1="90"
+            y1="150"
+            x2="110"
+            y2="150"
+            stroke="url(#energyFlow)"
+            strokeWidth="3"
+          />
+          <Path d="M 110 145 L 115 150 L 110 155 Z" fill="url(#energyFlow)" />
 
-        {/* Solar Panels */}
-        <Rect
-          x="120"
-          y="135"
-          width="40"
-          height="20"
-          fill="url(#panelGradient)"
-          rx="2"
-        />
-        <Rect
-          x="122"
-          y="137"
-          width="36"
-          height="4"
-          fill="rgba(255,255,255,0.5)"
-          rx="1"
-        />
-        <Line
-          x1="120"
-          y1="145"
-          x2="160"
-          y2="145"
-          stroke="#2563EB"
-          strokeWidth="1"
-        />
-        <Line
-          x1="120"
-          y1="150"
-          x2="160"
-          y2="150"
-          stroke="#2563EB"
-          strokeWidth="1"
-        />
-        <SvgText
-          x="140"
-          y="170"
-          fontSize="10"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Solar Panels
-        </SvgText>
+          {/* Solar Panels */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={SOLAR_PANELS_X}
+            y={SOLAR_PANELS_Y}
+            width={SOLAR_PANELS_WIDTH}
+            height={SOLAR_PANELS_HEIGHT}
+          />
+          <SvgText
+            x="140"
+            y="170"
+            fontSize="10"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Solar Panels
+          </SvgText>
 
-        {/* Arrow to Monitoring Unit */}
-        <Line
-          x1="165"
-          y1="150"
-          x2="185"
-          y2="150"
-          stroke="url(#energyFlow)"
-          strokeWidth="3"
-        />
-        <Path d="M 185 145 L 190 150 L 185 155 Z" fill="url(#energyFlow)" />
+          {/* Arrow to Monitoring Unit */}
+          <Line
+            x1="165"
+            y1="150"
+            x2="185"
+            y2="150"
+            stroke="url(#energyFlow)"
+            strokeWidth="3"
+          />
+          <Path d="M 185 145 L 190 150 L 185 155 Z" fill="url(#energyFlow)" />
 
-        {/* Monitoring Unit */}
-        <Rect
-          x="195"
-          y="135"
-          width="30"
-          height="30"
-          fill="url(#monitorGradient)"
-          rx="4"
-        />
-        <Rect x="200" y="140" width="20" height="15" fill="#FFFFFF" rx="2" />
-        <Rect x="202" y="142" width="16" height="2" fill="#A78BFA" rx="1" />
-        <Rect x="202" y="146" width="12" height="2" fill="#C4B5FD" rx="1" />
-        <Rect x="202" y="150" width="14" height="2" fill="#DDD6FE" rx="1" />
-        <SvgText
-          x="210"
-          y="180"
-          fontSize="10"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Monitor
-        </SvgText>
+          {/* Monitoring Unit */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={MONITOR_X}
+            y={MONITOR_Y}
+            width={MONITOR_WIDTH}
+            height={MONITOR_HEIGHT}
+          />
+          <SvgText
+            x="210"
+            y="180"
+            fontSize="10"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Monitor
+          </SvgText>
 
-        {/* Arrow to Cloud */}
-        <Line
-          x1="230"
-          y1="150"
-          x2="250"
-          y2="150"
-          stroke="url(#energyFlow)"
-          strokeWidth="3"
-        />
-        <Path d="M 250 145 L 255 150 L 250 155 Z" fill="url(#energyFlow)" />
+          {/* Arrow to Cloud */}
+          <Line
+            x1="230"
+            y1="150"
+            x2="250"
+            y2="150"
+            stroke="url(#energyFlow)"
+            strokeWidth="3"
+          />
+          <Path d="M 250 145 L 255 150 L 250 155 Z" fill="url(#energyFlow)" />
 
-        {/* Cloud */}
-        <Path
-          d="M 265 125 Q 265 120 270 120 Q 275 120 280 125 Q 285 120 290 120 Q 295 120 295 125 Q 295 130 290 135 Q 285 140 280 140 Q 275 140 270 135 Q 265 140 260 140 Q 255 140 255 135 Q 255 130 260 125 Z"
-          fill="url(#cloudGradient)"
-        />
-        <SvgText
-          x="275"
-          y="155"
-          fontSize="10"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Cloud
-        </SvgText>
+          {/* Cloud */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={SECOND_CLOUD_X}
+            y={SECOND_CLOUD_Y}
+            width={SECOND_CLOUD_WIDTH}
+            height={SECOND_CLOUD_HEIGHT}
+          />
+          <SvgText
+            x="275"
+            y="155"
+            fontSize="10"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Cloud
+          </SvgText>
 
-        {/* Arrow to Devices */}
-        <Line
-          x1="295"
-          y1="130"
-          x2="315"
-          y2="130"
-          stroke="url(#energyFlow)"
-          strokeWidth="3"
-        />
-        <Path d="M 315 125 L 320 130 L 315 135 Z" fill="url(#energyFlow)" />
+          {/* Arrow to Devices */}
+          <Line
+            x1="295"
+            y1="130"
+            x2="315"
+            y2="130"
+            stroke="url(#energyFlow)"
+            strokeWidth="3"
+          />
+          <Path d="M 315 125 L 320 130 L 315 135 Z" fill="url(#energyFlow)" />
 
-        {/* Analytics Dashboard (Computer) */}
-        <Rect
-          x="270"
-          y="160"
-          width="25"
-          height="15"
-          fill="url(#computerGradient)"
-          rx="2"
-        />
-        <Rect x="275" y="165" width="15" height="10" fill="#FFFFFF" rx="1" />
-        <Rect x="277" y="167" width="11" height="1" fill="#D8B4FE" rx="0.5" />
-        <Rect x="277" y="169" width="8" height="1" fill="#E9D5FF" rx="0.5" />
-        <Rect x="277" y="171" width="9" height="1" fill="#F3E8FF" rx="0.5" />
-        <SvgText
-          x="282.5"
-          y="185"
-          fontSize="9"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Dashboard
-        </SvgText>
+          {/* Analytics Dashboard (Computer) */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={DASHBOARD_X}
+            y={DASHBOARD_Y}
+            width={DASHBOARD_WIDTH}
+            height={DASHBOARD_HEIGHT}
+          />
+          <SvgText
+            x="282.5"
+            y="185"
+            fontSize="9"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Dashboard
+          </SvgText>
 
-        {/* Mobile App (Smartphone) */}
-        <Rect
-          x="305"
-          y="155"
-          width="12"
-          height="25"
-          fill="url(#phoneGradient)"
-          rx="2"
-        />
-        <Rect x="307" y="160" width="8" height="15" fill="#FFFFFF" rx="1" />
-        <Circle cx="311" cy="175" r="1" fill="#F9A8D4" />
-        <SvgText
-          x="311"
-          y="190"
-          fontSize="9"
-          fill="#374151"
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontWeight="bold"
-        >
-          Mobile
-        </SvgText>
+          {/* Mobile App (Smartphone) */}
+          <Image
+            href={require("../assets/solar.png")}
+            x={MOBILE_APP_X}
+            y={MOBILE_APP_Y}
+            width={MOBILE_APP_WIDTH}
+            height={MOBILE_APP_HEIGHT}
+          />
+          <SvgText
+            x="311"
+            y="190"
+            fontSize="9"
+            fill="#374151"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            Mobile
+          </SvgText>
+        </G>
       </Svg>
     </Animated.View>
   );
