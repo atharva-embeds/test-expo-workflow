@@ -28,9 +28,15 @@ export const imagePositions = {
 export const paths = {
   towerToInverter: {
     points: [
-      { x: 230, y: 120  },
-      { x: 200, y: 190 },
+      { x: 230, y: 120 },
+      { x: 100, y: 190 },
       { x: 130, y: 260 },
+    ],
+  },
+  inverterToSolar: {
+    points: [
+      { x: 330, y: 180 },
+      { x: 200, y: 120 },
     ],
   },
 };

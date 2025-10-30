@@ -2,7 +2,7 @@ import React from "react";
 import { View, ScrollView, useWindowDimensions } from "react-native";
 import Svg, { Image, Path } from "react-native-svg";
 import { imagePositions, diagramConstants, paths } from "./diagramConstants";
-const points: Point[] = paths.towerToInverter.points;
+const allPaths = Object.values(paths);
 
 interface Point {
   x: number;
@@ -59,8 +59,6 @@ interface SolarDiagramProps {
   height: number;
 }
 
-
-
 const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
   return (
     <View>
@@ -69,6 +67,21 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
         height={height}
         viewBox={`0 0 ${diagramConstants.DIAGRAM_WIDTH} ${diagramConstants.DIAGRAM_HEIGHT}`}
       >
+
+        {/* Paths */}
+        {allPaths.map((path, index) => (
+          <Path
+            key={index}
+            d={pointsToRoundedPath(path.points)}
+            stroke="#ADD8E6"
+            strokeWidth="2"
+            fill="none"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        ))}
+
+
         {/* Electric Tower */}
         <Image
           href={require("../assets/images/tower.png")}
@@ -76,16 +89,6 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
           y={imagePositions.electricTower.y}
           width={imagePositions.electricTower.width}
           height={imagePositions.electricTower.height}
-        />
-
-        {/* Path */}
-        <Path
-          d={pointsToRoundedPath(points)}
-          stroke="#ADD8E6"
-          strokeWidth="2"
-          fill="none"
-          strokeLinejoin="round"
-          strokeLinecap="round"
         />
 
         {/* Inverter */}
