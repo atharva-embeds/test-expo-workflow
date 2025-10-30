@@ -6,7 +6,6 @@ import {
   Easing,
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import { router } from "expo-router";
 import Svg, {
   Circle,
   Path,
@@ -109,7 +108,7 @@ export default function Splash() {
         }),
       ).start();
     });
-  }, [imageLoaded]);
+  }, [imageLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <View className="flex-1 font-mono items-center justify-center px-12">

@@ -1,8 +1,9 @@
-import React from "react";
-import { View, ScrollView, useWindowDimensions } from "react-native";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { View, ScrollView, useWindowDimensions, Animated } from "react-native";
 import Svg, { Image, Path } from "react-native-svg";
 import { imagePositions, diagramConstants, paths } from "./diagramConstants";
 const allPaths = Object.values(paths);
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 interface Point {
   x: number;
@@ -15,6 +16,15 @@ const normalize = (v: Point) => {
   const len = Math.hypot(v.x as number, v.y as number) || 1;
   return { x: v.x / len, y: v.y / len };
 };
+
+function calculatePathLength(points: Point[]): number {
+  if (!points || points.length < 2) return 0;
+  let length = 0;
+  for (let i = 1; i < points.length; i++) {
+    length += dist(points[i - 1], points[i]);
+  }
+  return length;
+}
 
 function pointsToRoundedPath(points: Point[], radius = 12): string {
   if (!points || points.length === 0) return "";
@@ -60,6 +70,42 @@ interface SolarDiagramProps {
 }
 
 const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
+  const [pathLengths, setPathLengths] = useState<number[]>([]);
+
+  const progress1 = useRef(new Animated.Value(0)).current;
+  const progress2 = useRef(new Animated.Value(0)).current;
+  const progress3 = useRef(new Animated.Value(0)).current;
+  const progress4 = useRef(new Animated.Value(0)).current;
+  const progress5 = useRef(new Animated.Value(0)).current;
+  const progress6 = useRef(new Animated.Value(0)).current;
+
+  const progresses = useMemo(
+    () => [progress1, progress2, progress3, progress4, progress5, progress6],
+    [], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
+  const dash = 15;
+
+  useEffect(() => {
+    const lengths = allPaths.map((path) => calculatePathLength(path.points));
+    setPathLengths(lengths);
+  }, []);
+
+  useEffect(() => {
+    if (pathLengths.length === 0) return;
+    progresses.forEach((progress, index) => {
+      setTimeout(() => {
+        Animated.loop(
+          Animated.timing(progress, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: false,
+          }),
+        ).start();
+      }, index * 300);
+    });
+  }, [pathLengths, progresses]);
+
   return (
     <View>
       <Svg
@@ -68,17 +114,41 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
         viewBox={`0 0 ${diagramConstants.DIAGRAM_WIDTH} ${diagramConstants.DIAGRAM_HEIGHT}`}
       >
         {/* Paths */}
-        {allPaths.map((path, index) => (
-          <Path
-            key={index}
-            d={pointsToRoundedPath(path.points)}
-            stroke="#ADD8E6"
-            strokeWidth="2"
-            fill="none"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-        ))}
+        {allPaths.map((path, index) => {
+          const d = pointsToRoundedPath(path.points);
+          const pathLength = pathLengths[index] || 0;
+          const gap = pathLength - dash;
+          const dashArray = `${dash},${gap}`;
+          const dashOffset = -pathLength;
+          return (
+            <React.Fragment key={index}>
+              {/* Background path */}
+              <Path
+                d={d}
+                stroke="#ADD8E6"
+                strokeWidth="3"
+                fill="none"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                opacity="0.3"
+              />
+              {/* Animated flowing dash */}
+              <AnimatedPath
+                d={d}
+                stroke="#ADD8E6"
+                strokeWidth="3"
+                fill="none"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeDasharray={dashArray}
+                strokeDashoffset={progresses[index].interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, dashOffset],
+                })}
+              />
+            </React.Fragment>
+          );
+        })}
 
         {/* Electric Tower */}
         <Image
@@ -109,29 +179,11 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
 
         {/* EMU */}
         <Image
-          href={require("../assets/images/emu.png")}
+          href={require("../assets/images/emu5.png")}
           x={imagePositions.emu.x}
           y={imagePositions.emu.y}
           width={imagePositions.emu.width}
           height={imagePositions.emu.height}
-        />
-
-        {/* Cloud */}
-        <Image
-          href={require("../assets/images/cloud3.png")}
-          x={imagePositions.cloud.x}
-          y={imagePositions.cloud.y}
-          width={imagePositions.cloud.width}
-          height={imagePositions.cloud.height}
-        />
-
-        {/* Phone */}
-        <Image
-          href={require("../assets/images/phone.png")}
-          x={imagePositions.phone.x}
-          y={imagePositions.phone.y}
-          width={imagePositions.phone.width}
-          height={imagePositions.phone.height}
         />
       </Svg>
     </View>
