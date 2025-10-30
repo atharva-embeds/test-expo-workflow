@@ -67,7 +67,6 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
         height={height}
         viewBox={`0 0 ${diagramConstants.DIAGRAM_WIDTH} ${diagramConstants.DIAGRAM_HEIGHT}`}
       >
-
         {/* Paths */}
         {allPaths.map((path, index) => (
           <Path
@@ -80,7 +79,6 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
             strokeLinecap="round"
           />
         ))}
-
 
         {/* Electric Tower */}
         <Image
@@ -107,6 +105,33 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
           y={imagePositions.solarPanel.y}
           width={imagePositions.solarPanel.width}
           height={imagePositions.solarPanel.height}
+        />
+
+        {/* EMU */}
+        <Image
+          href={require("../assets/images/emu.png")}
+          x={imagePositions.emu.x}
+          y={imagePositions.emu.y}
+          width={imagePositions.emu.width}
+          height={imagePositions.emu.height}
+        />
+
+        {/* Cloud */}
+        <Image
+          href={require("../assets/images/cloud3.png")}
+          x={imagePositions.cloud.x}
+          y={imagePositions.cloud.y}
+          width={imagePositions.cloud.width}
+          height={imagePositions.cloud.height}
+        />
+
+        {/* Phone */}
+        <Image
+          href={require("../assets/images/phone.png")}
+          x={imagePositions.phone.x}
+          y={imagePositions.phone.y}
+          width={imagePositions.phone.width}
+          height={imagePositions.phone.height}
         />
       </Svg>
     </View>
