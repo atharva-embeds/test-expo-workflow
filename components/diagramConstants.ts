@@ -46,23 +46,23 @@ export const imagePositions = {
 export const paths = {
   towerToInverter1: {
     points: [
-      { x: 310, y: 172 },
-      { x: 310, y: 60 },
       { x: 200, y: 60 },
+      { x: 310, y: 60 },
+      { x: 310, y: 172 },
     ],
   },
   towerToInverter2: {
     points: [
-      { x: 290, y: 230 },
-      { x: 290, y: 80 },
       { x: 200, y: 80 },
+      { x: 290, y: 80 },
+      { x: 290, y: 230 },
     ],
   },
   towerToInverter3: {
     points: [
-      { x: 270, y: 150 },
-      { x: 270, y: 100 },
       { x: 200, y: 100 },
+      { x: 270, y: 100 },
+      { x: 270, y: 150 },
     ],
   },
 
