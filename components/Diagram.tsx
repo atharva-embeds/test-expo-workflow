@@ -93,12 +93,15 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
 
   useEffect(() => {
     if (pathLengths.length === 0) return;
+    const speed = 50; // pixels per second
     progresses.forEach((progress, index) => {
+      const pathLength = pathLengths[index] || 0;
+      const duration = (pathLength / speed) * 1000;
       setTimeout(() => {
         Animated.loop(
           Animated.timing(progress, {
             toValue: 1,
-            duration: 2500,
+            duration: duration,
             useNativeDriver: false,
           }),
         ).start();
