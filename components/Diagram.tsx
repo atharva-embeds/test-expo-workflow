@@ -1,18 +1,5 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
-import {
-  View,
-  ScrollView,
-  useWindowDimensions,
-  Animated,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { View, ScrollView, useWindowDimensions, Animated } from "react-native";
 import Svg, { Image, Path } from "react-native-svg";
 import { imagePositions, diagramConstants, paths } from "./diagramConstants";
 const allPaths = Object.values(paths);
@@ -80,14 +67,9 @@ function pointsToRoundedPath(points: Point[], radius = 12): string {
 interface SolarDiagramProps {
   width: number;
   height: number;
-  reverse: boolean;
 }
 
-const SolarDiagram: React.FC<SolarDiagramProps> = ({
-  width,
-  height,
-  reverse,
-}) => {
+const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
   const [pathLengths, setPathLengths] = useState<number[]>([]);
 
   const progress1 = useRef(new Animated.Value(0)).current;
@@ -104,21 +86,6 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({
 
   const dash = 15;
 
-  const startAnimations = useCallback(() => {
-    progresses.forEach((progress, index) => {
-      progress.setValue(reverse ? 1 : 0);
-      setTimeout(() => {
-        Animated.loop(
-          Animated.timing(progress, {
-            toValue: reverse ? 0 : 1,
-            duration: 1000,
-            useNativeDriver: false,
-          }),
-        ).start();
-      }, index * 300);
-    });
-  }, [reverse, progresses]);
-
   useEffect(() => {
     const lengths = allPaths.map((path) => calculatePathLength(path.points));
     setPathLengths(lengths);
@@ -126,8 +93,18 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({
 
   useEffect(() => {
     if (pathLengths.length === 0) return;
-    startAnimations();
-  }, [pathLengths, reverse, startAnimations]);
+    progresses.forEach((progress, index) => {
+      setTimeout(() => {
+        Animated.loop(
+          Animated.timing(progress, {
+            toValue: 1,
+            duration: 2500,
+            useNativeDriver: false,
+          }),
+        ).start();
+      }, index * 300);
+    });
+  }, [pathLengths, progresses]);
 
   return (
     <View>
@@ -142,7 +119,7 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({
           const pathLength = pathLengths[index] || 0;
           const gap = pathLength - dash;
           const dashArray = `${dash},${gap}`;
-          const offsetRange = reverse ? [-pathLength, 0] : [0, -pathLength];
+          const dashOffset = -pathLength;
           return (
             <React.Fragment key={index}>
               {/* Background path */}
@@ -166,7 +143,7 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({
                 strokeDasharray={dashArray}
                 strokeDashoffset={progresses[index].interpolate({
                   inputRange: [0, 1],
-                  outputRange: offsetRange,
+                  outputRange: [0, dashOffset],
                 })}
               />
             </React.Fragment>
@@ -217,7 +194,6 @@ export default function Diagram() {
   const { width: screenWidth } = useWindowDimensions();
   const diagramWidth = Math.min(screenWidth - 40, screenWidth * 0.9);
   const diagramHeight = diagramWidth * 0.857;
-  const [reverse, setReverse] = useState(false);
 
   return (
     <View className="flex-1 pt-12">
@@ -225,27 +201,10 @@ export default function Diagram() {
         {/* Diagram Container */}
         <View className="mx-4 mt-6 mb-6">
           <View className="items-center mb-6">
-            <SolarDiagram
-              width={diagramWidth}
-              height={diagramHeight}
-              reverse={reverse}
-            />
+            <SolarDiagram width={diagramWidth} height={diagramHeight} />
           </View>
         </View>
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => setReverse(!reverse)}
-        style={{
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-          backgroundColor: "#ADD8E6",
-          padding: 10,
-          borderRadius: 5,
-        }}
-      >
-        <Text style={{ color: "#000" }}>Reverse Direction</Text>
-      </TouchableOpacity>
     </View>
   );
 }
