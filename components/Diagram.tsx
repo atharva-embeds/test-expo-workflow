@@ -84,7 +84,7 @@ const SolarDiagram: React.FC<SolarDiagramProps> = ({ width, height }) => {
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  const dash = 15;
+  const dash = 30;
 
   useEffect(() => {
     const lengths = allPaths.map((path) => calculatePathLength(path.points));
